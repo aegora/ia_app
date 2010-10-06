@@ -10,25 +10,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101003024817) do
+ActiveRecord::Schema.define(:version => 20101006213006) do
 
   create_table "base_stats", :force => true do |t|
     t.string   "race"
-    t.integer  "loc"
-    t.integer  "con"
-    t.integer  "halo"
-    t.integer  "willpower"
-    t.integer  "boon_cost"
-    t.integer  "multiplier_agility"
-    t.integer  "multiplier_connection"
-    t.integer  "multiplier_intellect"
-    t.integer  "multiplier_magic"
-    t.integer  "multiplier_might"
+    t.integer  "loc",                                   :default => 3
+    t.integer  "con",                                   :default => 10
+    t.integer  "halo",                                  :default => 0
+    t.integer  "willpower",                             :default => 0
+    t.integer  "boon_cost",                             :default => 0
+    t.integer  "multiplier_agility",                    :default => 3
+    t.integer  "multiplier_connection",                 :default => 3
+    t.integer  "multiplier_intellect",                  :default => 3
+    t.integer  "multiplier_magic",                      :default => 3
+    t.integer  "multiplier_might",                      :default => 3
     t.string   "racial_flaws"
     t.string   "racial_abilities"
     t.string   "racial_skills"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "mana",                                  :default => 0
+    t.integer  "starting_skillpts",                     :default => 25
+    t.integer  "faith",                                 :default => 0
+    t.string   "deity",                  :limit => nil
+    t.string   "racial_multiplier_mods", :limit => nil
+    t.string   "primary_sphere", :default = "arcane"
   end
 
   create_table "boons", :force => true do |t|
@@ -61,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20101003024817) do
     t.integer  "willpower",             :default => 0,  :null => false
     t.integer  "mana",                  :default => 0,  :null => false
     t.integer  "faith",                 :default => 0,  :null => false
+    t.string "primary_sphere", :default => 'arcane', :null => false
   end
 
   create_table "experiences", :force => true do |t|
@@ -94,15 +101,6 @@ ActiveRecord::Schema.define(:version => 20101003024817) do
     t.datetime "updated_at"
   end
 
-  create_table "microposts", :force => true do |t|
-    t.string   "content"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "microposts", ["user_id"], :name => "index_microposts_on_user_id"
-
   create_table "skills", :force => true do |t|
     t.integer  "character_id"
     t.string   "skill_name"
@@ -112,6 +110,17 @@ ActiveRecord::Schema.define(:version => 20101003024817) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "category",      :limit => nil, :null => false
+  end
+
+  create_table "spells", :force => true do |t|
+    t.integer  "character_id"
+    t.string   "spell_name"
+    t.string   "sphere"
+    t.integer  "level"
+    t.boolean  "custom",            :default => false
+    t.string   "spell_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|

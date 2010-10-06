@@ -8,7 +8,7 @@
 class Character < ActiveRecord::Base
 	 attr_accessible :backstory, :character_name, :race, :gender, :alignment, :deity,
   	 :multiplier_agility, :multiplier_connection, :multiplier_intellect, :multiplier_might, 
-	 :multiplier_magic
+	 :multiplier_magic, :primary_sphere
 
 
 	 belongs_to :user

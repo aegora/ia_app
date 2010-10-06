@@ -1,18 +1,37 @@
 <script type="text/javascript">
 
+var base_stat;
+
 function show_alert() {
     alert("I am an alert box!");
 }
 
-function decrease_multiplier(what) {
-   
-    alert("worked.\n"+what);
+function change_multiplier() {
+    alert("called.\n");
+      
+    var diff = 0
+    var neg_diff = 0
+    var pos_diff = 0
     
-}
-
-
-function increase_multiplier() {
-    alert("worked.");
+    diff = $('character_multiplier_agility').value - base_stat['multiplier_agility'];
+    if (diff > 0) {pos_diff += diff; } else {neg_diff += diff; }
+    
+    diff = $('character_multiplier_connection').value - base_stat['multiplier_connection'];
+    if (diff > 0) {pos_diff += diff; } else {neg_diff += diff; }
+    
+    diff = $('character_multiplier_intellect').value - base_stat['multiplier_intellect'];
+    if (diff > 0) {pos_diff += diff; } else {neg_diff += diff; }
+    
+    diff = $('character_multiplier_magic').value - base_stat['multiplier_magic'];
+    if (diff > 0) {pos_diff += diff; } else {neg_diff += diff; }
+    
+    diff = $('character_multiplier_might').value - base_stat['multiplier_might'];
+    if (diff > 0) {pos_diff += diff; } else {neg_diff += diff; }
+    
+    $('total_reductions').value = neg_diff
+    $('total_increases').value = pos_diff
+    
+    alert("finished.")
 }
 
 
@@ -34,15 +53,32 @@ function racial_change() {
       eval(transport.responseJSON)
       //alert("bing");
       var race_base = transport.responseJSON;
-      var race_text = transport.responseText;
+      //var race_text = transport.responseText;
       //alert("Obj:\n"+race_base["base_stat"]+"\nText:\n"+race_text);
-      //alert("Values:\n"+race_base['base_stat']['race']);
-      $('boondiv').update(race_base['base_stat']['boon_cost']);
-      $('character_deity').value = race_base['base_stat']['deity'];
-      $('character_faith').innerHTML = race_base['base_stat']['faith'];
-      //$('')
-      //$('')
       
+      base_stat = race_base['base_stat']
+      
+      //alert("Values:\n"+base_stat['faith']);
+      
+      $('boondiv').update(base_stat['boon_cost']);
+      $('character_deity').value = base_stat['deity'];
+      $('character_faith').value = base_stat['faith'];
+      $('character_starting_skillpts').value = base_stat['starting_skillpts']
+      
+      $('character_multiplier_agility').value = base_stat['multiplier_agility'];
+      $('character_multiplier_connection').value = base_stat['multiplier_connection'];
+      $('character_multiplier_intellect').value = base_stat['multiplier_intellect'];
+      $('character_multiplier_magic').value = base_stat['multiplier_magic'];
+      $('character_multiplier_might').value = base_stat['multiplier_might'];
+      $('total_reductions').value = 0;
+      $('total_increases').value = 0;
+      
+      $('character_loc').value = base_stat['loc'];
+      $('character_halo').value = base_stat['halo'];
+      $('character_willpower').value = base_stat['willpower'];
+      $('character_mana').value = base_stat['mana'];
+      $('character_con').value = base_stat['con'];
+      $('character_primary_sphere').value = base_stat['primary_sphere'];
     },
     onFailure: function(transport){
       alert("There was an error accessing your racial template.\n"+
@@ -131,80 +167,141 @@ function racial_change() {
   <tr>
   <td>
  <div id='race_div'>
-<!-- <%= @test %> -->
  
- Racial Boon Cost: <label for='boondiv'> <%= @race_base.boon_cost %></div><br />
+ Racial Boon Cost: <span id='boondiv'> <%= @race_base.boon_cost %></span><br />
 *This number of boons will be deducted from your total should you choose this race. <br />
+<br />
+
+<div class='field'>
+Starting skill points: <%= f.number_field :starting_skillpts, 
+  :value => "#{@race_base.starting_skillpts}", :size => 5, :readonly => 'true' %>
+</div>
 
 <table>
 <tr><td>
   <div class="field">
-    <label for="character_deity">Deity:</label>
-    <input id="character_deity" name="character[:deity]" size="10" type="text"
-        value='<%= @race_base.deity %>'    />
+    <%= f.label :deity %>
+    <%= f.text_field :deity, :value=>"#{@race_base.deity}" %>    
   </div>
 </td><td>
-     Starting Faith:<label for='character_faith'> 
-     <%= @race_base.faith %> 
-   </label> 
+  <div class='field'>
+     <%= f.label :faith %>
+     <%= f.number_field :faith, :size => 3, :readonly => 'true' %>
+  </div>
 </td></tr>  
 </table>   
 
-
-
+<fieldset>
+  <legend>Starting Physical Statistics</legend>
   <table>
+    <tr>
+      <td>  
+	<div class='field'>
+	  <%= f.label :loc, "Location" %> <br />
+	  <%= f.number_field :loc, :readonly=>'true', :value=>"#{@race_base.loc}", :size=>5 %>
+        </div>
+      </td>
+      <td>  
+	<div class='field'>
+	  <%= f.label :con, "Constitution" %> <br />
+	  <%= f.number_field :loc, :readonly=>'true', :value=>"#{@race_base.con}", :size=>5%>
+        </div>
+      </td>
+       <td>  
+	<div class='field'>
+	  <%= f.label :halo, "Halo" %> <br />
+	  <%= f.number_field :halo, :readonly=>'true', :value=>"#{@race_base.halo}", :size=>5%>
+        </div>
+      </td>
+    </tr>
+    <tr>    
+     <td>  
+	<div class='field'>
+	  <%= f.label :con, "Willpower" %> <br />
+	  <%= f.number_field :willpower, :readonly=>'true', :value=>"#{@race_base.willpower}", :size=>5 %>
+        </div>
+      </td>
+       <td>  
+	<div class='field'>
+	  <%= f.label :mana, "Mana" %> <br />
+	  <%= f.number_field :mana, :readonly=>'true', :value=>"#{@race_base.mana}", :size=>5%>
+        </div>
+      </td>
+      <td>
+        <div class='field'>
+	  <%= f.label :primary_sphere, "Primary Sphere" %> <br />
+	  <%= f.select :primary_sphere,  options_for_select([], 
+	    :selected => "#{@race_base.primary_sphere}") 
+	  %>  
+	</div>
+      </td>
+    </tr>
+  </table>
+</fieldset>
+
+<fieldset>
+<legend>Skill Multipliers</legend>
+
+
+<!-- If your racial type has a bonus to the skill multipliers (as do elves) then, display this info. -->
+<% if @race_base.racial_multiplier_mods.nil? == false then %>
+<p><strong>Racial Modifiers:</strong><%= @race_base.racial_multiplier_mods %></p>
+<% end %>
+
+<table>
   <tr>
   <td valign="top">
   <div class="field">
-    <label for="character_multiplier_agility">Agility</label><br />
-    <%= number_field_tag "character_multiplier_agility", 
-             @race_base.multiplier_agility, :in => 1...10,
-             :step => 1, :maxlength => 2, :size => 3, :readonly => :true
-	%>	<br />
-	<input type='button' onclick="increase_multiplier('agility');" value='+' />
-	<input type='button' onclick="decrease_multiplier('agility');" value='-' />
+    <%= f.label :multiplier_agility, "Agility" %><br />
+    <%= f.select :multiplier_agility, 
+             options_for_select([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], @race_base.multiplier_agility),{},
+	     :onchange => "change_multiplier()"
+	     %>	<br />	
   </div> </td>
   
    <td valign="top"><div class="field">
-    <label for="character_multiplier_connection">Connection</label><br />
-    <%= number_field_tag "character_multiplier_connection", 
-             @race_base.multiplier_connection, :in => 1...10,
-             :step => 1, :maxlength => 2, :size => 3, :readonly => :true
-	%>	<br />	
-	<input type='button' onclick="increase_multiplier('connection');" value='+' />
-	<input type='button' onclick="decrease_multiplier('connection');" value='-' />
+    <%= f.label :multiplier_connection, "Connection" %> <br />
+    <%=  f.select :multiplier_connection, 
+             options_for_select([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],  @race_base.multiplier_connection),{},
+	     :onchange=>"change_multiplier()"
+	     %>	<br />		
   </div></td>
   
    <td valign="top"><div class="field">
-    <label for="character_multiplier_intellect">Intellect</label><br />
-     <%= number_field_tag "character_multiplier_intellect", 
-             @race_base.multiplier_intellect, :in => 1...10,
-             :step => 1, :maxlength => 2, :size => 3,  :readonly => :true
-	%>		<br />
-	<input type='button' onclick="increase_multiplier('intellect');" value='+' />
-	<input type='button' onclick="decrease_multiplier('intellect');" value='-' />
+     <%= f.label :multiplier_intellect, "Intellect" %> <br />
+     <%= f.select :multiplier_intellect, 
+             options_for_select([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], @race_base.multiplier_intellect), {},
+	     :onchange=>"change_multiplier()"
+	     %>		<br />	
   </div></td>
    <td valign="top"><div class="field">
-    <label for="character_multiplier_magic">Magic</label><br />
-     <%= number_field_tag "character_multiplier_magic", 
-             @race_base.multiplier_magic, :in => 1...10,
-             :step => 1, :maxlength => 2,  :size => 3, :readonly => :true
-	%>		<br />
-	<input type='button' onclick="increase_multiplier('magic');" value='+' />
-	<input type='button' onclick="decrease_multiplier('magic');" value='-' />
+     <%= f.label :multiplier_magic, "Magic" %> <br />
+     <%= f.select :multiplier_magic, 
+             options_for_select([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], @race_base.multiplier_magic),{},
+	     :onchange=>"change_multiplier()"
+	     %>		<br />	
   </div></td>
    <td valign="top"><div class="field">
-   <label for="character_multiplier_might">Might</label><br />
-     <%= number_field_tag "character_multiplier_might", 
-             @race_base.multiplier_might, :in => 1...10,
-             :step => 1, :maxlength => 2,  :size => 3, :readonly => :true
-	%>		<br />
-	<input type='button' onclick="increase_multiplier('might');" value='+' />
-	<input type='button' onclick="decrease_multiplier('might');" value='-' />
+     <%= f.label :multiplier_might, "Might" %> <br />
+     <%= f.select :multiplier_might, 
+             options_for_select([ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], @race_base.multiplier_might),{},
+	     :onchange=>"change_multiplier()"
+	     %>	<br />	
   </div></td>
   </tr>
-  
   </table>
+  <table><tr>
+  <td>
+  Total Reductions: 
+  <input type='number' id='total_reductions' readonly='true' value=0 size=5>
+  </td>
+  <td>
+  Total Increases: 
+  <input type='number' id='total_increases' readonly='true' value=0 size=5>
+  </td>
+  </tr></table>
+  </fieldset>
+  
   
  </div>
   </td>
@@ -226,8 +323,14 @@ function racial_change() {
       <span id='boon_display_area'> <%= @boons %>  </span>
       <br /> <br />
    
-      Multiplier Reductions:
-      <span id='multiplier_reduction_count'>3</span>
+      <p><small>
+Multiplier Reductions are set to the base values for the race you choose from the dropdown list. 
+You may decrease your multipliers
+by three (to a minimum of 1) as you desire. You may also increase two of your multipliers 
+by one to obtain an additional reduction point, however, this can be done only once.
+If your race is eligible for additional multiplier reductions, this will be noted above your multiplier 
+selection box.
+</small></p>
    
    
    <br />

@@ -5,20 +5,21 @@ class CreateCharacters < ActiveRecord::Migration
       t.integer :user_id
       t.string :character_name
       t.string :race
-      t.string :gender
+      t.string :gender, :default => 'female'
       t.string :alignment
       t.string :deity
-      t.integer :multiplier_agility
-      t.integer :multiplier_connection
-      t.integer :multiplier_intellect
-      t.integer :multiplier_magic
-      t.integer :multiplier_might
-      t.integer :loc
-      t.integer :con
-      t.integer :halo
-      t.integer :willpower
-      t.integer :mana
-      t.integer :faith
+      t.integer :multiplier_agility, :default => 3
+      t.integer :multiplier_connection, :default => 3
+      t.integer :multiplier_intellect, :default => 3
+      t.integer :multiplier_magic, :default => 3
+      t.integer :multiplier_might, :default => 3
+      t.integer :loc, default => 3
+      t.integer :con, :default => 10
+      t.integer :halo, :default => 0
+      t.integer :willpower, :default => 0
+      t.integer :mana, :default => 0
+      t.integer :faith, :default => 0
+      t.string :primary_sphere, :default => 'arcane'
 
       t.timestamps
     end
