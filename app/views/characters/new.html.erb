@@ -20,26 +20,26 @@ function increase_multiplier() {
 // each multiplier element etc as appropriate. no need to reload an 
 // entire div element.
 function racial_change() {
-alert("Boo1!");
+  //alert("Boo1!");
   var race_choice = $('character_race');
-  alert("Boo2!");
+  //alert("Boo2!");
   
   
-  new Ajax.Request('character[race]', {
+  new Ajax.Request('race_info', {
     method: 'get',
     contentType: 'application/json',
     parameters: {raceindex: race_choice.value},
     onSuccess: function(transport) {
       //alert("Success!\n"+transport.responseJSON); 
       eval(transport.responseJSON)
-      alert("bing");
+      //alert("bing");
       var race_base = transport.responseJSON;
       var race_text = transport.responseText;
-      alert("Obj:\n"+race_base["base_stat"]+"\nText:\n"+race_text);
-      alert("Values:\n"+race_base['base_stat']['race']);
-      $('boondiv').update(race_base.boon_cost);
-      //$('')
-      //$('')
+      //alert("Obj:\n"+race_base["base_stat"]+"\nText:\n"+race_text);
+      //alert("Values:\n"+race_base['base_stat']['race']);
+      $('boondiv').update(race_base['base_stat']['boon_cost']);
+      $('character_deity').value = race_base['base_stat']['deity'];
+      $('character_faith').innerHTML = race_base['base_stat']['faith'];
       //$('')
       //$('')
       
@@ -133,18 +133,18 @@ alert("Boo1!");
  <div id='race_div'>
 <!-- <%= @test %> -->
  
- Racial Boon Cost: <div id='boondiv'> <%= @race_base.boon_cost %></div><br />
+ Racial Boon Cost: <label for='boondiv'> <%= @race_base.boon_cost %></div><br />
 *This number of boons will be deducted from your total should you choose this race. <br />
 
 <table>
 <tr><td>
   <div class="field">
-    <label for="character_deity">Deity</label>
+    <label for="character_deity">Deity:</label>
     <input id="character_deity" name="character[:deity]" size="10" type="text"
         value='<%= @race_base.deity %>'    />
   </div>
 </td><td>
-   <label for='character_faith'> Starting Faith: 
+     Starting Faith:<label for='character_faith'> 
      <%= @race_base.faith %> 
    </label> 
 </td></tr>  
