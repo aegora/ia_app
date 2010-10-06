@@ -1,0 +1,167 @@
+<table class="profile" summary="Character information">
+  <tr>
+    <td class="main">
+      <h1>
+        <%= @character.character_name %>
+      </h1>
+        <table>
+	  <tr>
+	    <td><strong>Race:</strong> <%= @character.race %> </td>
+	    <td><strong>Alignment:</strong> <%= @character.alignment %> </td>
+	  </tr>
+	  </table>
+	  <table>
+	  <tr>
+	  <td><strong>Level:</strong> <%= @spent_exp / 25 %></td>
+	  <td><strong>Spent XP: </strong><%= @spent_exp %></td>
+	  <td><strong>Total XP:</strong> <%= @gained_exp %></td>
+	  </tr>
+	  <tr>
+	    <td><strong>Loc:</strong> <%= @character.loc %></td>
+	    <td><strong>Con:</strong> <%= @character.con %></td>
+	    <td><strong>Halo: </strong><%= @character.halo %></td>
+	    <td><strong>Will: </strong><%= @character.willpower %></td>
+	    <td><strong>Mana: </strong><%= @character.mana %></td>
+	  </tr>
+	</table>
+	<% if @skills_agility.size > 0 then %>
+        <table class="skills" summary="agility skills">
+          <tr> 
+	    <th>Agility (x
+	      <%= @character.multiplier_agility %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_agility.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+        <% end %>
+	<% if @skills_connection.size > 0 then %>
+        <table class="skills" summary="connection skills">
+          <tr> 
+	    <th>Connection (x
+	      <%= @character.multiplier_connection %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_connection.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+	<% end %>
+	<% if @skills_intellect.size > 0 then %>
+        <table class="skills" summary="intellect skills">
+          <tr> 
+	    <th>Intellect (x
+	      <%= @character.multiplier_intellect %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_intellect.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+	<% end %>
+	<% if @skills_magic.size > 0 then %>
+        <table class="skills" summary="magic skills">
+          <tr> 
+	    <th>Magic (x
+	      <%= @character.multiplier_magic %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_magic.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+	<% end %>
+	<% if @skills_might.size > 0 then %>
+        <table class="skills" summary="might skills">
+          <tr> 
+	    <th>Might (x
+	      <%= @character.multiplier_might %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_might.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+	<% end %>
+	<% if @skills_divine.size > 0 then %>
+        <table class="skills" summary="divine skills">
+          <tr> 
+	    <th>Divine (x
+	      <%= @character.multiplier_magic %>)</th>
+	  </tr>
+          <tr> <td>
+	     <% @skills_divine.each_with_index {|s, i|  %>
+	       <strong><%= s.rank %></strong>&nbsp; &nbsp;
+	       <%= s.skill_name %> <%= s.skill_subtype.nil? ? '' : '('+s.skill_subtype+')' %>
+	       <% if i % 4 == 0 then %>
+	         </td><td>
+	       <% end %>	 
+	     <% } %>
+          </td></tr>	  
+        </table>
+	<% end %>
+	
+	
+	
+	<% if @character.flaws.size > 0 then %>
+	<strong>Flaws:</strong><br />
+	<p>
+	<% @character.flaws.each {|f| %>
+	  <%= f.flaw_type %>
+	  <% if f.exp_value > 0 then %>
+	    (<%= f.exp_value %>)
+	  <% end %>  	
+	  <br />
+	<% } %>
+	</p>
+	<% end %>
+	
+	
+	<% if @character.items.size > 0 then %>
+	<strong>Inventory:</strong><br />
+	<table>
+	<% @character.items.each {|it| %>
+	 <tr>
+	   <td> 
+	     <%= it.howmany > 0 ? '' : it.howmany %>
+	     <%= it.what %> 
+	   </td>
+	   <td align='center'><%= it.value.nil? ? ' ' :  it.value.to_s+' sp' %> </td>
+	   <td align='right' colspan = 6> <%= it.expiry_date %> </td>
+	 </tr><tr>
+	   <td colspan = 6 rowspan = 3><%= it.description %></td>
+	 </tr>
+	<% } %>
+	</table>
+	
+	<% end %>
+	
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,20 @@
+<table class="profile" summary="Profile information">
+  <tr>
+    <td class="main">
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.name %>
+      </h1>
+      <br /><strong>My Characters:</strong> <br />
+      <% unless @user.characters.empty? %>
+        <table class="characters" summary="User's characters">
+          <%= render @characters %>
+        </table>
+        <%= will_paginate @characters %>
+      <% end %>
+    </td>
+    <td class="sidebar round">
+      <%= link_to "New Character", newchar_path %>
+    </td>
+  </tr>
+</table>

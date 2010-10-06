@@ -1,0 +1,45 @@
+<h1>Edit character</h1>
+
+<%= form_for(@character) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <h1> <%= @character.character_name %> </h1>
+  <div class="field">
+    <%= f.label :character_name %><br />
+    <%= f.text_field :character_name %>
+  </div>
+  
+  <p></p>
+  <fieldset>
+    <legend>Agility (x<%= @character.multiplier_agility %>) </legend>
+    <table>
+      <tr>
+        <td>
+	  <%= @ambidexterity %>
+	  Ambidexterity 
+	  <button type='button'>+</button>
+	  <button type='button'>-</button>
+	</td>
+	<td>
+	  <%= @adac %>
+	  ADAC
+	  <button type='button'>+</button>
+	  <button type='button'>-</button>
+	</td>
+	<td>
+	  <%= @balance %>
+	  Balance
+	  <button type='button'>+</button>
+	  <button type='button'>-</button>
+	</td>
+      </tr>
+      
+    </table>
+  </fieldset>
+  
+  
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+
+

@@ -1,0 +1,245 @@
+<script type="text/javascript">
+
+function show_alert() {
+    alert("I am an alert box!");
+}
+
+function decrease_multiplier(what) {
+   
+    alert("worked.\n"+what);
+    
+}
+
+
+function increase_multiplier() {
+    alert("worked.");
+}
+
+
+// this function obtains new base stats for the race chosen and updates 
+// each multiplier element etc as appropriate. no need to reload an 
+// entire div element.
+function racial_change() {
+alert("Boo1!");
+  var race_choice = $('character_race');
+  alert("Boo2!");
+  
+  
+  new Ajax.Request('character[race]', {
+    method: 'get',
+    contentType: 'application/json',
+    parameters: {raceindex: race_choice.value},
+    onSuccess: function(transport) {
+      //alert("Success!\n"+transport.responseJSON); 
+      eval(transport.responseJSON)
+      alert("bing");
+      var race_base = transport.responseJSON;
+      var race_text = transport.responseText;
+      alert("Obj:\n"+race_base["base_stat"]+"\nText:\n"+race_text);
+      alert("Values:\n"+race_base['base_stat']['race']);
+      $('boondiv').update(race_base.boon_cost);
+      //$('')
+      //$('')
+      //$('')
+      //$('')
+      
+    },
+    onFailure: function(transport){
+      alert("There was an error accessing your racial template.\n"+
+      "Please notify your web administrator. \n-Aegora");
+    }  
+  });
+
+}
+
+</script>
+
+
+<h1>Create new character</h1>
+
+<%= form_for(@character) do |f| %>
+<%= render 'shared/error_messages', :object => f.object %>
+<table class = 'profile' summary='New character generation form'>
+<tr>
+  <td class='main'>
+  <table>
+  <tr>
+  <td>
+  <div class="field">
+    <%= f.label :character_name, "Character Name" %><br />
+    <%= f.text_field :character_name %>
+  </div>
+  </td>
+  <td>
+  <div class="field">
+    <%= f.label :race %><br />
+    <%= f.select "race",
+      options_from_collection_for_select(
+          @base_stats, 
+          :id, 
+          :race,
+	  @race_index
+      ), {}, {:onchange => 'racial_change()'}
+         
+      %>
+    </select>  
+    <!-- <input type='button' onclick='racial_change()' value='ReFresh'/>  -->
+   </div>
+  </td>
+  </tr>
+  <tr>
+  <td>
+  <div class="field">
+    <%= f.label :alignment %><br />
+    <%= f.select :alignment, 
+             options_for_select([
+	     "lawful good hopeful",
+	     "neutral good hopeful",
+	     "chaotic good hopeful",
+	     "lawful neutral hopeful",
+	     "neutral neutral hopeful",
+	     "chaotic neutral hopeful",
+	     "lawful evil hopeful",
+	     "neutral evil hopeful",
+	     "chaotic evil hopeful",
+		"lawful good neutral",
+	     "neutral good neutral",
+	     "chaotic good neutral",
+	     "lawful neutral neutral",
+	     "neutral neutral neutral",
+	     "chaotic neutral neutral",
+	     "lawful evil neutral",
+	     "neutral evil neutral",
+	     "chaotic evil neutral"
+	     ], 
+	        :selected => "lawful good hopeful")
+	%>	
+  </div>
+  </td>
+  <td>
+  <div class="field">
+    <%= f.label :gender %><br />
+    <%= f.select :gender,
+             options_for_select(["male", "female", "other"], 
+	        :selected => "female")
+	%>	
+  </div>
+  </td>
+  </tr>
+  </table>
+  <table>
+  <tr>
+  <td>
+ <div id='race_div'>
+<!-- <%= @test %> -->
+ 
+ Racial Boon Cost: <div id='boondiv'> <%= @race_base.boon_cost %></div><br />
+*This number of boons will be deducted from your total should you choose this race. <br />
+
+<table>
+<tr><td>
+  <div class="field">
+    <label for="character_deity">Deity</label>
+    <input id="character_deity" name="character[:deity]" size="10" type="text"
+        value='<%= @race_base.deity %>'    />
+  </div>
+</td><td>
+   <label for='character_faith'> Starting Faith: 
+     <%= @race_base.faith %> 
+   </label> 
+</td></tr>  
+</table>   
+
+
+
+  <table>
+  <tr>
+  <td valign="top">
+  <div class="field">
+    <label for="character_multiplier_agility">Agility</label><br />
+    <%= number_field_tag "character_multiplier_agility", 
+             @race_base.multiplier_agility, :in => 1...10,
+             :step => 1, :maxlength => 2, :size => 3, :readonly => :true
+	%>	<br />
+	<input type='button' onclick="increase_multiplier('agility');" value='+' />
+	<input type='button' onclick="decrease_multiplier('agility');" value='-' />
+  </div> </td>
+  
+   <td valign="top"><div class="field">
+    <label for="character_multiplier_connection">Connection</label><br />
+    <%= number_field_tag "character_multiplier_connection", 
+             @race_base.multiplier_connection, :in => 1...10,
+             :step => 1, :maxlength => 2, :size => 3, :readonly => :true
+	%>	<br />	
+	<input type='button' onclick="increase_multiplier('connection');" value='+' />
+	<input type='button' onclick="decrease_multiplier('connection');" value='-' />
+  </div></td>
+  
+   <td valign="top"><div class="field">
+    <label for="character_multiplier_intellect">Intellect</label><br />
+     <%= number_field_tag "character_multiplier_intellect", 
+             @race_base.multiplier_intellect, :in => 1...10,
+             :step => 1, :maxlength => 2, :size => 3,  :readonly => :true
+	%>		<br />
+	<input type='button' onclick="increase_multiplier('intellect');" value='+' />
+	<input type='button' onclick="decrease_multiplier('intellect');" value='-' />
+  </div></td>
+   <td valign="top"><div class="field">
+    <label for="character_multiplier_magic">Magic</label><br />
+     <%= number_field_tag "character_multiplier_magic", 
+             @race_base.multiplier_magic, :in => 1...10,
+             :step => 1, :maxlength => 2,  :size => 3, :readonly => :true
+	%>		<br />
+	<input type='button' onclick="increase_multiplier('magic');" value='+' />
+	<input type='button' onclick="decrease_multiplier('magic');" value='-' />
+  </div></td>
+   <td valign="top"><div class="field">
+   <label for="character_multiplier_might">Might</label><br />
+     <%= number_field_tag "character_multiplier_might", 
+             @race_base.multiplier_might, :in => 1...10,
+             :step => 1, :maxlength => 2,  :size => 3, :readonly => :true
+	%>		<br />
+	<input type='button' onclick="increase_multiplier('might');" value='+' />
+	<input type='button' onclick="decrease_multiplier('might');" value='-' />
+  </div></td>
+  </tr>
+  
+  </table>
+  
+ </div>
+  </td>
+  </tr>
+  <tr>
+    <td>  
+       <div class="field">
+         <%= f.label :backstory %>*<br />
+         <%= f.text_area :backstory %><br />
+         *Must be longer than 50 characters.
+       </div>
+    </td>
+ </tr>
+</table>
+
+  </td>
+  <td class="sidebar round">
+      Available Boons: 
+      <span id='boon_display_area'> <%= @boons %>  </span>
+      <br /> <br />
+   
+      Multiplier Reductions:
+      <span id='multiplier_reduction_count'>3</span>
+   
+   
+   <br />
+<input type='button' onclick='show_alert()' value="Show alert box" />
+
+  </td>
+</tr>
+</table>
+  
+  
+  <div class="actions">
+    <%= f.submit "Create" %>
+  </div>
+ 
+<% end %>

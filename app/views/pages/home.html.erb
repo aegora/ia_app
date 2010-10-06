@@ -1,0 +1,20 @@
+<h1>Welcome</h1>
+<p>
+  This is the Inritius Alliance Character Database page. 
+ </p>
+<p> 
+  Through this portal you are able to access the official versions of your character to
+  add or modify skills or manage the items on your character sheet.
+</p>
+ <% if signed_in? %>
+     
+ <!-- # changes to character_path later ... -->    
+<%= link_to "Character List", characters_path, :class => "signup_button round" %>
+
+<% else %>
+      
+<%= link_to "Sign up now!", signup_path, :class => "signup_button round" %>
+
+<% end %>
+      
+      

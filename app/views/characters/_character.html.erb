@@ -1,0 +1,21 @@
+<tr>
+  <td class="character">
+    <span class="content"><%= character.character_name %> - 
+    <%= character.race %></span>
+  </td>
+<% user = character.user rescue User.find(character.user_id) %>
+<% if current_user?(user) %>
+  <td>
+   <%= link_to "edit",  edit_character_path(character),
+    :title => character.character_name %>
+&nbsp; &nbsp;
+  <%= link_to "view", character, 
+    :action => :show,
+    :title => character.character_name %>
+&nbsp; &nbsp;    
+        <%= link_to "delete", character, :method => :delete,
+                                     :confirm => "You sure?",
+                                     :title => character.character_name %>
+  </td>
+  <% end %>
+</tr>
