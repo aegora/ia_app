@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  spell_name: MyString
+  sphere: MyString
+  level: 1
+  spell_description: MyString
+
+two:
+  spell_name: MyString
+  sphere: MyString
+  level: 1
+  spell_description: MyString

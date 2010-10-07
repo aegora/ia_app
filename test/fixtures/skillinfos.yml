@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  skill_name: MyString
+  category: MyString
+  ranked: false
+  skillcost: 1
+  skill_description: MyString
+  advanced: false
+
+two:
+  skill_name: MyString
+  category: MyString
+  ranked: false
+  skillcost: 1
+  skill_description: MyString
+  advanced: false

@@ -14,7 +14,7 @@ class CharactersController < ApplicationController
   def show
     @character = Character.find(params[:id])
     @title = @character.character_name
-    
+    @race_name = BaseStat.find(@character.race).race
     
     skills = @character.skills 
     @spent_exp = 0
@@ -61,7 +61,7 @@ end # end show function
 
 
   def new
-    @test = params.inspect
+    #@test = params.inspect
 		
     # if a race has been chosen, use this to populate the starting stat fields,		
     # otherwise, use argead as default.
@@ -81,6 +81,11 @@ end # end show function
     current_user.boons.each {|b|
       @boons += b.howmany
     }
+    
+    @sphere_list = []
+    Spellinfo.all(:select => "distinct sphere").each { |s|
+      @sphere_list += [s.sphere]
+    }
   end
 
 
@@ -90,7 +95,7 @@ end # end show function
 	 @par = params.inspect
 	
 	if params[:raceindex].nil? then
-	    @race_index = 1
+	    @race_index = "argead"
 	else
            @race_index = params[:raceindex]
         end

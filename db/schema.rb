@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101006213006) do
+ActiveRecord::Schema.define(:version => 20101006230858) do
 
   create_table "base_stats", :force => true do |t|
     t.string   "race"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20101006213006) do
     t.integer  "faith",                                 :default => 0
     t.string   "deity",                  :limit => nil
     t.string   "racial_multiplier_mods", :limit => nil
-    t.string   "primary_sphere", :default = "arcane"
+    t.string   "primary_sphere",         :limit => nil, :default => "arcane", :null => false
   end
 
   create_table "boons", :force => true do |t|
@@ -46,29 +46,8 @@ ActiveRecord::Schema.define(:version => 20101006213006) do
     t.datetime "updated_at"
   end
 
-  create_table "characters", :force => true do |t|
-    t.string   "backstory"
-    t.integer  "user_id"
-    t.string   "character_name"
-    t.string   "race"
-    t.string   "gender"
-    t.string   "alignment"
-    t.string   "deity"
-    t.integer  "multiplier_agility"
-    t.integer  "multiplier_connection"
-    t.integer  "multiplier_intellect"
-    t.integer  "multiplier_magic"
-    t.integer  "multiplier_might"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "loc",                   :default => 3,  :null => false
-    t.integer  "con",                   :default => 10, :null => false
-    t.integer  "halo",                  :default => 1,  :null => false
-    t.integer  "willpower",             :default => 0,  :null => false
-    t.integer  "mana",                  :default => 0,  :null => false
-    t.integer  "faith",                 :default => 0,  :null => false
-    t.string "primary_sphere", :default => 'arcane', :null => false
-  end
+# Could not dump table "characters" because of following StandardError
+#   Unknown type '' for column 'primary_sphere'
 
   create_table "experiences", :force => true do |t|
     t.integer  "character_id"
@@ -101,6 +80,17 @@ ActiveRecord::Schema.define(:version => 20101006213006) do
     t.datetime "updated_at"
   end
 
+  create_table "skillinfos", :force => true do |t|
+    t.string   "skill_name"
+    t.string   "category"
+    t.boolean  "ranked"
+    t.integer  "skillcost"
+    t.string   "skill_description"
+    t.boolean  "advanced"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "skills", :force => true do |t|
     t.integer  "character_id"
     t.string   "skill_name"
@@ -110,6 +100,15 @@ ActiveRecord::Schema.define(:version => 20101006213006) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "category",      :limit => nil, :null => false
+  end
+
+  create_table "spellinfos", :force => true do |t|
+    t.string   "spell_name"
+    t.string   "sphere"
+    t.integer  "level"
+    t.string   "spell_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "spells", :force => true do |t|

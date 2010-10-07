@@ -2,12 +2,12 @@
 
 var base_stat;
 
-function show_alert() {
-    alert("I am an alert box!");
+function message(text) {
+  alert(text);
 }
 
 function change_multiplier() {
-    alert("called.\n");
+   // alert("called.\n");
       
     var diff = 0
     var neg_diff = 0
@@ -31,7 +31,7 @@ function change_multiplier() {
     $('total_reductions').value = neg_diff
     $('total_increases').value = pos_diff
     
-    alert("finished.")
+    //alert("finished.")
 }
 
 
@@ -79,13 +79,22 @@ function racial_change() {
       $('character_mana').value = base_stat['mana'];
       $('character_con').value = base_stat['con'];
       $('character_primary_sphere').value = base_stat['primary_sphere'];
+      
+      var racial_mod = base_stat['racial_multiplier_mods'];
+      $('racial_multiplier_div').update(racial_mod);
+      
+      $('racial_benefit_div').update(base_stat['racial_skills'])
+      $('racial_ability_div').update(base_stat['racial_abilities'])
+      $('racial_flaw_div').update(base_stat['racial_flaws'])
+      
     },
     onFailure: function(transport){
       alert("There was an error accessing your racial template.\n"+
       "Please notify your web administrator. \n-Aegora");
     }  
   });
-
+  
+  
 }
 
 </script>
@@ -204,7 +213,7 @@ Starting skill points: <%= f.number_field :starting_skillpts,
       <td>  
 	<div class='field'>
 	  <%= f.label :con, "Constitution" %> <br />
-	  <%= f.number_field :loc, :readonly=>'true', :value=>"#{@race_base.con}", :size=>5%>
+	  <%= f.number_field :con, :readonly=>'true', :value=>"#{@race_base.con}", :size=>5%>
         </div>
       </td>
        <td>  
@@ -230,7 +239,7 @@ Starting skill points: <%= f.number_field :starting_skillpts,
       <td>
         <div class='field'>
 	  <%= f.label :primary_sphere, "Primary Sphere" %> <br />
-	  <%= f.select :primary_sphere,  options_for_select([], 
+	  <%= f.select :primary_sphere,  options_for_select(@sphere_list, 
 	    :selected => "#{@race_base.primary_sphere}") 
 	  %>  
 	</div>
@@ -244,9 +253,11 @@ Starting skill points: <%= f.number_field :starting_skillpts,
 
 
 <!-- If your racial type has a bonus to the skill multipliers (as do elves) then, display this info. -->
+<div id='racial_multiplier_div'>
 <% if @race_base.racial_multiplier_mods.nil? == false then %>
 <p><strong>Racial Modifiers:</strong><%= @race_base.racial_multiplier_mods %></p>
 <% end %>
+</div>
 
 <table>
   <tr>
@@ -302,6 +313,26 @@ Starting skill points: <%= f.number_field :starting_skillpts,
   </tr></table>
   </fieldset>
   
+  <fieldset>
+    <legend>Racial Benefits </legend>
+      <div id='racial_benefit_div'>
+         
+      </div>
+  </fieldset>
+  
+    <fieldset>
+    <legend>Racial Abilities </legend>
+      <div id='racial_ability_div'>
+         
+      </div>
+  </fieldset>
+  
+    <fieldset>
+    <legend>Racial Flaws </legend>
+      <div id='racial_flaw_div'>
+         
+      </div>
+  </fieldset>
   
  </div>
   </td>
@@ -334,7 +365,6 @@ selection box.
    
    
    <br />
-<input type='button' onclick='show_alert()' value="Show alert box" />
 
   </td>
 </tr>
